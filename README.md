@@ -97,10 +97,36 @@ console output
 
 exec /opt/keter/bin/keter /opt/keter/etc/keter-config.yaml
 ```
+Or a Systemd service
+
+```
+# /lib/systemd/system/keter.service
+[Unit]
+Description=Keter which runs yesod applications
+After=network.target local-fs.target
+
+[Service]
+Type=simple
+StandardOutput=tty
+StandardError=tty
+ExecStart=/opt/keter/bin/keter /opt/keter/etc/keter-config.yaml
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+and run
+
+    sudo systemctl enable keter.service
 
 Finally, start the job for the first time:
 
     sudo start keter
+
+Or with Systemd
+
+    sudo service keter start
 
 Optionally, you may wish to change the owner on the `/opt/keter/incoming`
 folder to your user account, so that you can deploy without `sudo`ing.
